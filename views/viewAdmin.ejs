@@ -1,0 +1,93 @@
+<%- include('header') %>
+
+        <div class="breadcrumbs">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Table</a></li>
+                            <li class="active">Basic table</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content mt-3">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form action="/admin/SearchAdminData">
+                        <input type="text" class="form-control col-md-8" placeholder="search.." name="searchAdminData">
+                        <button type="submit" class="btn btn-success">Search</button>
+                        </form>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <strong class="card-title">Basic Table</strong>
+                            </div>
+                            <div class="card-body">
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Phone</th>
+                                            <th scope="col">profile</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for(var admin of allAdminData){ %>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td><%= admin.name %> </td>
+                                            <td><%= admin.email %> </td>
+                                            <td><%= admin.phone %> </td>
+                                            <td><img src="<%= admin.profile %>" height="100" /></td>
+                                            <td>
+                                                <% if(admin.status){%>
+                                                <a href="/admin/SetInActiveAdmin/<%= admin.id %>" class="btn btn-success">Active</a>
+                                                <% } else { %>  
+                                                <a href="/admin/SetInActiveAdmin/<%= admin.id %>" class="btn btn-danger">Inative</a>
+                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <a href="/admin/deleteAdmin/?adminId=<%= admin.id %>">
+                                                 <i class="fa fa-trash"></i> </a> ||
+                                            <a href="/admin/updateAdmin/<%= admin.id %>"><i class="fa fa-edit"></i></a> ||
+                                            <i class="fa fa-eye"></i>
+                                            </td>
+                                            
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div><!-- .animated -->
+        </div><!-- .content -->
+
+
+    </div><!-- /#right-panel -->
+
+    <!-- Right Panel -->
+
+ 
+
+<%- include('footer') %>

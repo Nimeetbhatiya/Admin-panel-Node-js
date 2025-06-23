@@ -1,0 +1,146 @@
+<%- include('header') %>
+
+    <div class="breadcrumbs">
+        <div class="col-sm-4">
+            <div class="page-header float-left">
+                <div class="page-title">
+                    <h1>Dashboard</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="page-header float-right">
+                <div class="page-title">
+                    <ol class="breadcrumb text-right">
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Update</a></li>
+                        <li class="active">Admin</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+
+
+            <!--/.col-->
+
+
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <strong></strong>
+                    </div>
+                    <% var name = singleAdmin.name.split(" ") %>
+                    <div class="card-body card-block">
+                        <form action="/admin/EditAdminData/<%= singleAdmin.id %>" method="post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="text-input" class=" form-control-label">First
+                                        Name</label></div>
+                                <div class="col-12 col-md-9"><input type="text" id="text-input" name="firstName"
+                                        placeholder="First Name" class="form-control" value="<%= name[0] %>"></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="text-input" class=" form-control-label">Last
+                                        Name</label></div>
+                                <div class="col-12 col-md-9"><input type="text" id="text-input" name="lastName"
+                                        placeholder="Last Name" class="form-control" value="<%= name[1] %>"></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="email-input"
+                                        class=" form-control-label">Email</label></div>
+                                <div class="col-12 col-md-9"><input type="email" id="email-input" name="email"
+                                        placeholder="Enter Email" class="form-control" value="<%= singleAdmin.email %>"></div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="text-input" class=" form-control-label">Enter
+                                        Phone </label></div>
+                                <div class="col-12 col-md-9"><input type="text" id="text-input" name="phone"
+                                        placeholder="Enter your Phone number" class="form-control" value="<%= singleAdmin.phone %>"></div>
+                            </div>
+
+                            <% let city = ["Surat","Rajkot","Vadodara"];%>
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="select" class=" form-control-label">Select</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <select name="city" id="select" class="form-control">
+                                        <option value="0">Please select</option>
+                                        <% city.map((v,i) => { %>
+                                        <option value="<%= v %>" <% if(singleAdmin.city ==v){%> <%= 'selected' %> <% } %>> <%= v %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label class=" form-control-label">Gender</label></div>
+                                <div class="col col-md-9">
+                                    <div class="form-check-inline form-check">
+                                        <label for="inline-radio1" class="form-check-label ">
+                                            <input type="radio" id="inline-radio1" name="gender" value="male"
+                                                class="form-check-input" <% if(singleAdmin.gender == 'male'){ %> <%= 'checked' %> <% } %>>Male
+                                        </label>
+                                        <label for="inline-radio2" class="form-check-label ">
+                                            <input type="radio" id="inline-radio2" name="gender" value="female"
+                                                class="form-check-input" <% if(singleAdmin.gender == 'female'){ %> <%= 'checked' %> <% } %>>Female
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label class=" form-control-label">Hobby</label>
+                                </div>
+                                <div class="col col-md-9">
+                                    <div class="form-check-inline form-check">
+                                        <label for="inline-checkbox1" class="form-check-label ">
+                                            <input type="checkbox" id="inline-checkbox1" name="hobby" value="Reading"
+                                                class="form-check-input" <% if(singleAdmin.hobby.includes('Reading')){ %> <%= 'checked' %> <% } %>>Reading
+                                        </label>
+                                        <label for="inline-checkbox2" class="form-check-label ">
+                                            <input type="checkbox" id="inline-checkbox2" name="hobby" value="Music"
+                                                class="form-check-input" <% if(singleAdmin.hobby.includes('Music')){ %> <%= 'checked' %> <% } %>>Music
+                                        </label>
+                                        <label for="inline-checkbox3" class="form-check-label ">
+                                            <input type="checkbox" id="inline-checkbox3" name="hobby" value="Adventure"
+                                                class="form-check-input" <% if(singleAdmin.hobby.includes('Adventure')){ %> <%= 'checked' %> <% } %>>Adventure
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="textarea-input"
+                                        class=" form-control-label">Textarea</label></div>
+                                <div class="col-12 col-md-9"><textarea name="description" id="textarea-input" rows="5"
+                                        placeholder="Enter Description.." class="form-control"> <%= singleAdmin.description %></textarea></div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="file-input" class=" form-control-label">Upload
+                                        profile</label></div>
+                                <div class="col-12 col-md-9"><input type="file" id="file-input" name="profile"
+                                        class="form-control-file"><img src="<%= singleAdmin.profile %>" height="70"/></div>
+                            </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> Edit
+                        </button>
+                        <button type="reset" class="btn btn-danger btn-sm">
+                            <i class="fa fa-ban"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                </form>
+
+            </div>
+
+            <%- include('footer') %>
