@@ -8,6 +8,7 @@ const moment = require('moment');
 const path = require('path');
 
 const fs = require('fs');
+const { log } = require('console');
 
 module.exports.dashboard = (req,res) => {
     //  console.log("admin dashboard");
@@ -275,11 +276,29 @@ module.exports.checkEmailPage = async(req,res) =>{
     }
 }
 
+function getOTP(){
+            let otp = (Math.round(Math.random()*1000000)).toString();
+            // console.log(otp.length);
+
+            if(otp.length==6){
+                return newOTP = otp;
+            }
+            else{
+                getOTP();
+            }             
+}
+
 module.exports.SendOTP = async(req,res) => {
     try{
         // console.log(req.body);
         let checkEmail = await adminModel.findOne({email:req.body.email});
+
+
         if(checkEmail){
+            let otp = getOTP();
+            res.cookie('otp',otp);
+            res.cookie('email',req.body.email);
+
             const transporter = nodemailer.createTransport({
                 host: "smtp.gmail.com",
                 port: 587,
@@ -291,14 +310,21 @@ module.exports.SendOTP = async(req,res) => {
     });
 
         const info = await transporter.sendMail({
-        from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
-        to: "bar@example.com, baz@example.com",
-        subject: "Hello ✔",
-        text: "Hello world?", // plain‑text body
-        html: "<b>Hello world?</b>", // HTML body
+        from: 'nimeetbhatiya7635@gmail.com',
+        to: req.body.email,
+        subject: "Your OTP is here",
+        text: "OTP", // plain‑text body
+        html: `<b>OTP : ${otp}</b>`, // HTML body
     });
+        if(info){
+            return res.redirect('/admin/otpPage')
+         }
+          else{
+            console.log("Server Error");
+         }
             
-        }else{
+        }
+        else{
             console.log("Email not found!!");
         }
         return res.redirect('/admin/checkEmailPage');
@@ -307,4 +333,66 @@ module.exports.SendOTP = async(req,res) => {
 
     }
 }
-// end forgot password
+
+module.exports.otpPage = async(req,res) => {
+    try{
+        return res.render('forgotPassword/otpPage');
+    }
+    catch(err){
+
+    }
+}
+
+
+module.exports.verifyOTP = async(req,res) => {
+    try{
+        let cookieOTP = req.cookies.otp;
+        if(cookieOTP == req.body.otp){
+            // console.log("RIGHT");
+            return res.redirect('/admin/forgotPassword');
+        } else {
+            console.log("OTP not Match!!");
+            return res.redirect('/admin/otpPage');
+        }
+    }
+    catch(err){
+
+    }
+}
+
+module.exports.forgotPassword = async(req,res) => {
+    try{
+        return res.render('forgotPassword/forgotPassword'); 
+
+    } 
+    catch(err) {
+
+    }
+}
+
+module.exports.updatePassword = async(req,res) => {
+    try{
+        console.log(req.body);
+        if(req.body.npass == req.body.cpass){
+            
+            let cookieEmail = req.cookies.email;
+            let adminData = await adminModel.findOne({email:cookieEmail});
+            let encryptPassword = await bcrypt.hash(req.body.npass,10);
+            let updateAdmin = await adminModel.findByIdAndUpdate(adminData._id,{password : encryptPassword});
+            if(updateAdmin){
+                
+                res.clearCookie('otp');
+                res.clearCookie('email');
+                res.clearCookie('admin');
+                return res.redirect('/admin')
+            }
+        } else{
+            console.log("Password not match");
+            return res.redirect("/admin/forgotPassword");
+        }
+    } 
+    catch(err) {
+            console.log(err); 
+    }
+}
+// end forgot password  

@@ -37,6 +37,14 @@ routes.get("/checkEmailPage", adminctl.checkEmailPage);
 
 routes.post("/SendOTP", adminctl.SendOTP);
 
+routes.get('/otpPage', adminctl.otpPage);
+
+routes.post("/verifyOTP", adminctl.verifyOTP);
+
+routes.get("/forgotPassword", adminctl.forgotPassword);
+
+routes.post("/updatePassword", adminctl.updatePassword);
+
 // end forgot password
 
 module.exports = routes;
