@@ -25,8 +25,8 @@
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-lg-12">
-                        <form action="/admin/SearchAdminData">
-                        <input type="text" class="form-control col-md-8" placeholder="search.." name="searchAdminData">
+                        <form action="/admin/viewAdmin">
+                        <input type="text" value="<%= search %>" name="adminSearch" class="form-control col-md-8" placeholder="search.." name="searchAdminData">
                         <button type="submit" class="btn btn-success">Search</button>
                         </form>
                         
@@ -72,6 +72,26 @@
                                             
                                         </tr>
                                         <% } %>
+
+                                        <tr>
+                                            <td colspan="7">
+                                                <% for(var i=0; i<totalPage; i++){  %>
+                                                    <a href="?page=<%= i %>&adminSearch=<%= search %>"><button><%= i+1 %></button></a>
+                                                    <% } %>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="7"> 
+
+                                                <button>Prev</button>
+
+                                                <button><%= Number(page)+1 %></button>
+                                                
+                                                <button>Next</button>
+
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

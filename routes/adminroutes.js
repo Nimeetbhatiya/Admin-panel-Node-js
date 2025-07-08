@@ -27,6 +27,20 @@ routes.post("/EditAdminData/:adminId",adminModel.uploadAdminImage, adminctl.Edit
 
 routes.get("/deleteAdmin", adminctl.deleteAdmin);
 
+   routes.get("/logout", function(req,res){
+    try{
+        res.clearCookie('admin');
+        return res.redirect('/admin');
+    } catch{
+        console.log(err);
+        return res.redirect("/admin/dashboard");
+    }
+})
+
+// searching
+
+routes.get("/SearchAdminData",adminctl.SearchAdminData); 
+
 // status 
 
 routes.get("/SetInActiveAdmin/:adminId", adminctl.SetInActiveAdmin);

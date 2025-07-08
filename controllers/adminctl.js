@@ -23,10 +23,34 @@ module.exports.dashboard = (req,res) => {
 
 
 module.exports.viewAdmin = async (req,res) => {
-    let allAdminData = await adminModel.find();
+
+    let page = 0;
+     if(req.query.page){
+        page = req.query.page;
+     }
+
+     let search = '';
+     if(req.query.adminSearch){
+        search = req.query.adminSearch;
+     }
+
+
+
+    let perPage = 2;
+    let allAdminData = await adminModel.find({
+        name : {$regex : search, $options: "i"}
+   }).skip(page*perPage).limit(perPage);
+
+    let CountAllAdminData = await adminModel.find({
+        name : {$regex : search, $options: "i"}
+   }).countDocuments();
+
+
+    let totalPage = (Math.ceil(CountAllAdminData/perPage));
+
     // console.log(allAdminData);
      if(req.cookies.admin !== undefined){ 
-    return res.render('viewAdmin',{allAdminData,adminData : req.cookies.admin})
+    return res.render('viewAdmin',{allAdminData,totalPage,search,page,adminData : req.cookies.admin})
     }
     else{
         return res.redirect('/admin');
@@ -177,6 +201,41 @@ module.exports.SetInActiveAdmin = async (req,res) =>{
         return res.redirect("/admin/viewAdmin");
     }
 }
+
+// searching start
+
+module.exports.SearchAdminData = async (req,res) => {
+    try{
+        let search = '';
+
+        if(req.query){
+            search = req.query.adminSearch;
+        }
+
+        
+
+        let searchAllRecord = await adminModel.find({
+          $or: [
+            { name : {$regex : search, $options: "i"}},
+            { phone : {$regex : search} }
+          ]
+        })
+         if (req.cookies.admin !== undefined) {
+            return res.render('viewAdmin', {
+                allAdminData: searchAllRecord,
+                adminData: req.cookies.admin
+            });
+        } else {
+            return res.redirect('/admin');
+        }
+    }
+    catch(err){
+        console.log(err);
+        return res.redirect("/admin/viewAdmin");
+    }
+}
+
+// searching end
 
 // sign in page 
 
@@ -392,7 +451,7 @@ module.exports.updatePassword = async(req,res) => {
         }
     } 
     catch(err) {
-            console.log(err); 
+            console.log(err);
     }
 }
 // end forgot password  
