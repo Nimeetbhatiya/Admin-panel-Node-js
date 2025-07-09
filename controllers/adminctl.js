@@ -8,11 +8,9 @@ const moment = require('moment');
 const path = require('path');
 
 const fs = require('fs');
-const { log } = require('console');
 
 module.exports.dashboard = (req,res) => {
     //  console.log("admin dashboard");
-    console.log(req.cookies.admin)
     if(req.cookies.admin !== undefined){ 
     return res.render('dashboard',{adminData : req.cookies.admin});
     }

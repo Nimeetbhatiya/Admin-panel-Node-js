@@ -26,8 +26,11 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <form action="/admin/viewAdmin">
-                        <input type="text" value="<%= search %>" name="adminSearch" class="form-control col-md-8" placeholder="search.." name="searchAdminData">
-                        <button type="submit" class="btn btn-success">Search</button>
+                        <div style="display: flex; max-width: 400px;">
+                            <input type="text" value="<%= search %>" name="adminSearch" placeholder="Search..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-right: none; border-radius: 4px 0 0 4px;" />
+                            <button type="submit" style="padding: 8px 16px; background-color: #28a745; color: white; border: 1px solid #28a745; border-radius: 0 4px 4px 0;">Search</button>
+                        </div>
+
                         </form>
                         
                         <div class="card">
@@ -82,15 +85,20 @@
                                         </tr>
 
                                         <tr>
-                                            <td colspan="7"> 
+                                            <td colspan="7">
+                                                <div class="btn-group">
+                                                    <% const prevPage = Number(page) - 1; %>
+                                                    <% const nextPage = Number(page) + 1; %>
 
-                                                <button>Prev</button>
+                                                    <a href="?page=<%= prevPage %>&adminSearch=<%= search %>" class="btn btn-secondary btn-sm" <%= page <= 0 ? 'disabled' : '' %>>Prev</a>
 
-                                                <button><%= Number(page)+1 %></button>
-                                                
-                                                <button>Next</button>
+                                                    <button class="btn btn-light btn-sm disabled"><%= Number(page) + 1 %></button>
 
+                                                    <a href="?page=<%= nextPage %>&adminSearch=<%= search %>" class="btn btn-secondary btn-sm" <%= nextPage >= totalPage ? 'disabled' : '' %>>Next</a>
+                                                </div>
                                             </td>
+
+                                            <!-- <button><%= Number(page)+1 %></button> -->
                                         </tr>
                                     </tbody>
                                 </table>
